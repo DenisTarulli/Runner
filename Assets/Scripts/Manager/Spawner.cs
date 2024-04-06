@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private bool recentlySpawned = false;
+
+    [System.Serializable]
+    public struct SpawnableObject
     {
-        
+        public GameObject prefab;
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private SpawnableObject[] objects;
+
+    public void Spawn()
     {
-        
+        if (recentlySpawned) return;
+
+        StartCoroutine(nameof(SpawnDelay));
+
+        int randomIndex = Mathf.FloorToInt(Random.Range(0f, objects.GetLength(0)));
+
+        Instantiate(objects[randomIndex].prefab, transform.position, Quaternion.identity);
+    }
+
+    private IEnumerator SpawnDelay() // To prevent spawn overlapping
+    {
+        recentlySpawned = true;
+
+        yield return new WaitForSeconds(0.15f);
+
+        recentlySpawned = false;
     }
 }

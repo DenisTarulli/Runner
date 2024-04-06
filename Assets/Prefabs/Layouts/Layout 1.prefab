@@ -496,4 +496,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95fd689bdfc70934b9ddf8295c74fb48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 5
+  scrollSpeed: 8

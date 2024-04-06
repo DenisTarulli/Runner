@@ -6,7 +6,16 @@ public class Ground : MonoBehaviour
 {
     [SerializeField] private float scrollSpeed = 1f;
 
+    private Spawner spawner;
+
     private const string IS_EDGE = "Edge";
+    private const string IS_TRIGGER = "Trigger";
+    private const string IS_SPAWNER = "Spawner";
+
+    private void Start()
+    {
+        spawner = GameObject.FindWithTag(IS_SPAWNER).GetComponent<Spawner>();
+    }
 
     private void Update()
     {
@@ -15,10 +24,10 @@ public class Ground : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.CompareTag(IS_EDGE))
+            Destroy(gameObject);
 
-        if (!collision.gameObject.CompareTag(IS_EDGE)) return;
-
-        Destroy(gameObject);
+        else if (collision.gameObject.CompareTag(IS_TRIGGER))
+            spawner.Spawn();
     }
 }
