@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PlayerActions : MonoBehaviour
 {
-    private Vector3 leftPosition = new (-2f, 2f, 0f);
-    private Vector3 rightPosition = new (2f, 2f, 0f);
-    private Vector3 midPosition = new (0f, 2f, 0f);
-
     private int positionIndex = 0;
+    private bool canMove = true;
+
+    private const float movementCooldown = 0.18f;
+    private const string MID_TO_LEFT = "MidtoLeft";
+    private const string MID_TO_RIGHT = "MidtoRight";
+    private const string LEFT_TO_MID = "LefttoMid";
+    private const string RIGHT_TO_MID = "RighttoMid";
+
+    private Animator animator;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         positionIndex = 0;
     }
 
@@ -22,32 +28,50 @@ public class PlayerActions : MonoBehaviour
 
     private void Movement()
     {
-        if (Input.GetKeyDown(KeyCode.A) && positionIndex != -1)
+        if (Input.GetKeyDown(KeyCode.A) && positionIndex != -1 && canMove)
         {
             if (positionIndex == 0)
             {
-                transform.position = leftPosition;
+                animator.SetTrigger(MID_TO_LEFT);
                 positionIndex -= 1;
             }
             else if (positionIndex == 1)
             {
-                transform.position = midPosition;
+                animator.SetTrigger(RIGHT_TO_MID);
                 positionIndex -= 1;
             }
+
+            StartCoroutine(nameof(MovementCooldown));
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && positionIndex != 1)
+        if (Input.GetKeyDown(KeyCode.D) && positionIndex != 1 && canMove)
         {
             if (positionIndex == 0)
             {
-                transform.position = rightPosition;
+                animator.SetTrigger(MID_TO_RIGHT);
                 positionIndex += 1;
             }
             else if (positionIndex == -1)
             {
-                transform.position = midPosition;
+                animator.SetTrigger(LEFT_TO_MID);
                 positionIndex += 1;
             }
+
+            StartCoroutine(nameof(MovementCooldown));
         }
+    }
+
+    private IEnumerator MovementCooldown()
+    {
+        canMove = false;
+
+        yield return new WaitForSeconds(movementCooldown);
+
+        canMove = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
     }
 }
