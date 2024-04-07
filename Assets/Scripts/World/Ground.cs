@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class Ground : MonoBehaviour
 {
-    [SerializeField] private float scrollSpeed = 1f;
-
     private Spawner spawner;
 
     private const string IS_EDGE = "Edge";
     private const string IS_TRIGGER = "Trigger";
-    private const string IS_SPAWNER = "Spawner";
 
     private void Start()
     {
-        spawner = GameObject.FindWithTag(IS_SPAWNER).GetComponent<Spawner>();
+        spawner = FindObjectOfType<Spawner>();
     }
 
     private void Update()
     {
-        transform.position += Vector3.back * scrollSpeed * Time.deltaTime;
+        transform.position += Vector3.back * GameManager.Instance.gameSpeed * Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision collision)

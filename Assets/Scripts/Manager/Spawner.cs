@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    private bool recentlySpawned = false;
-
     [System.Serializable]
     public struct SpawnableObject
     {
@@ -16,21 +14,8 @@ public class Spawner : MonoBehaviour
 
     public void Spawn()
     {
-        //if (recentlySpawned) return;
-
-        //StartCoroutine(nameof(SpawnDelay));
-
         int randomIndex = Mathf.FloorToInt(Random.Range(0f, objects.GetLength(0)));
 
         Instantiate(objects[randomIndex].prefab, transform.position, Quaternion.identity);
-    }
-
-    private IEnumerator SpawnDelay() // To prevent spawn overlapping
-    {
-        recentlySpawned = true;
-
-        yield return new WaitForSeconds(0.1f);
-
-        recentlySpawned = false;
     }
 }

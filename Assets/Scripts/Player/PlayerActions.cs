@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
     private int positionIndex = 0;
     private bool canMove = true;
 
-    private const float movementCooldown = 0.12f;
+    [SerializeField] private Image image;
+
+    private const float movementCooldown = 0.08f;
     private const string MID_TO_LEFT = "MidtoLeft";
     private const string MID_TO_RIGHT = "MidtoRight";
     private const string LEFT_TO_MID = "LefttoMid";
@@ -71,7 +74,9 @@ public class PlayerActions : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
+    {       
+        if (!collision.collider.CompareTag("Obstacle")) return;
+
+        image.color = Color.red;
     }
 }
