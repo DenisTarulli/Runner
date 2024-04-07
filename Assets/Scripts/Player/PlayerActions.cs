@@ -7,7 +7,7 @@ public class PlayerActions : MonoBehaviour
     private int positionIndex = 0;
     private bool canMove = true;
 
-    private const float movementCooldown = 0.18f;
+    private const float movementCooldown = 0.12f;
     private const string MID_TO_LEFT = "MidtoLeft";
     private const string MID_TO_RIGHT = "MidtoRight";
     private const string LEFT_TO_MID = "LefttoMid";

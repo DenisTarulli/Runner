@@ -16,9 +16,9 @@ public class Spawner : MonoBehaviour
 
     public void Spawn()
     {
-        if (recentlySpawned) return;
+        //if (recentlySpawned) return;
 
-        StartCoroutine(nameof(SpawnDelay));
+        //StartCoroutine(nameof(SpawnDelay));
 
         int randomIndex = Mathf.FloorToInt(Random.Range(0f, objects.GetLength(0)));
 
@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour
     {
         recentlySpawned = true;
 
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.1f);
 
         recentlySpawned = false;
     }
