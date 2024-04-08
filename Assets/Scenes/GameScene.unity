@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d428988c9140589418f3cee717c52c98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialGameSpeed: 5
+  initialGameSpeed: 10
   gameSpeedIncrease: 0.1
   scoreText: {fileID: 581517348}
   hearts:

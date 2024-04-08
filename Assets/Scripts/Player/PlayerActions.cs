@@ -7,10 +7,12 @@ public class PlayerActions : MonoBehaviour
 {
     private int positionIndex = 0;
     private bool canMove = true;
+    private bool invulnerable = false;
 
     [SerializeField] private Image image;
 
-    private const float movementCooldown = 0.08f;
+    private float movementCooldown = 0.08f;
+    private float invulnerabilityTime = 2f;
     private const string MID_TO_LEFT = "MidtoLeft";
     private const string MID_TO_RIGHT = "MidtoRight";
     private const string LEFT_TO_MID = "LefttoMid";
@@ -76,9 +78,23 @@ public class PlayerActions : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.collider.CompareTag(IS_OBSTACLE)) return;
+        if (!collision.collider.CompareTag(IS_OBSTACLE) || invulnerable) return;
 
+        StartCoroutine(nameof(Invulnerability));
         GameManager.Instance.currentHp--;
         GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
+    }
+
+    private IEnumerator Invulnerability()
+    {
+        invulnerable = true;
+
+        animator.SetLayerWeight(1, 1);
+
+        yield return new WaitForSeconds(invulnerabilityTime);
+
+        animator.SetLayerWeight(1, 0);
+
+        invulnerable = false;
     }
 }
