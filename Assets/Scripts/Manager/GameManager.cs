@@ -14,11 +14,16 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
 
+    [SerializeField] private Image[] hearts;
+
     private float score;
+    public int currentHp;
 
     private void Start()
     {
         gameSpeed = initialGameSpeed;
+        currentHp = 3;
+        HpUpdate(currentHp);
     }
 
     private void Awake()
@@ -41,5 +46,16 @@ public class GameManager : MonoBehaviour
         score += gameSpeed * Time.deltaTime;
 
         scoreText.text = Mathf.FloorToInt(score).ToString("D5");
+    }
+
+    public void HpUpdate(int hp)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < hp)
+                hearts[i].color = Color.red;
+            else
+                hearts[i].color = Color.grey;
+        }
     }
 }

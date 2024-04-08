@@ -15,6 +15,7 @@ public class PlayerActions : MonoBehaviour
     private const string MID_TO_RIGHT = "MidtoRight";
     private const string LEFT_TO_MID = "LefttoMid";
     private const string RIGHT_TO_MID = "RighttoMid";
+    private const string IS_OBSTACLE = "Obstacle";
 
     private Animator animator;
 
@@ -74,9 +75,10 @@ public class PlayerActions : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {       
-        if (!collision.collider.CompareTag("Obstacle")) return;
+    {
+        if (!collision.collider.CompareTag(IS_OBSTACLE)) return;
 
-        image.color = Color.red;
+        GameManager.Instance.currentHp--;
+        GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
     }
 }
