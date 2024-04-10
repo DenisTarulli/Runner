@@ -7,7 +7,7 @@ public class PlayerActions : MonoBehaviour
 {
     private int positionIndex = 0;
     private bool canMove = true;
-    private bool invulnerable = false;
+    public bool invulnerable = false;
 
     [SerializeField] private Image image;
 
@@ -18,18 +18,22 @@ public class PlayerActions : MonoBehaviour
     private const string LEFT_TO_MID = "LefttoMid";
     private const string RIGHT_TO_MID = "RighttoMid";
     private const string IS_OBSTACLE = "Obstacle";
+    private const string HIT = "Hit";
 
     private Animator animator;
+    private PowerUps powerUps;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        powerUps = GetComponent<PowerUps>();
         positionIndex = 0;
     }
 
     private void Update()
     {
         Movement();
+        PowerUpInputs();
     }
 
     private void Movement()
@@ -67,6 +71,14 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    private void PowerUpInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(powerUps.Star());
+        }
+    }
+
     private IEnumerator MovementCooldown()
     {
         canMove = false;
@@ -78,11 +90,20 @@ public class PlayerActions : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.collider.CompareTag(IS_OBSTACLE) || invulnerable) return;
-
-        StartCoroutine(nameof(Invulnerability));
-        GameManager.Instance.currentHp--;
-        GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
+        if (collision.collider.CompareTag(IS_OBSTACLE))
+        {
+            if (!invulnerable)
+            {
+                StartCoroutine(nameof(Invulnerability));
+                GameManager.Instance.currentHp--;
+                GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
+            }
+            
+            if (powerUps.starActive)
+            {
+                Destroy(collision.collider.gameObject);
+            }
+        }
     }
 
     private IEnumerator Invulnerability()
@@ -90,11 +111,16 @@ public class PlayerActions : MonoBehaviour
         invulnerable = true;
 
         animator.SetLayerWeight(1, 1);
+        animator.SetBool(HIT, true);
 
         yield return new WaitForSeconds(invulnerabilityTime);
 
-        animator.SetLayerWeight(1, 0);
+        if (!powerUps.starActive)
+        {
+            animator.SetLayerWeight(1, 0);
+            invulnerable = false;
+        }
 
-        invulnerable = false;
+        animator.SetBool(HIT, false);
     }
 }
