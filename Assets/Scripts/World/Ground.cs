@@ -4,27 +4,29 @@ using UnityEngine;
 
 public class Ground : MonoBehaviour
 {
-    private Spawner spawner;
+    [SerializeField] private float scroll;
+    [SerializeField] private float scrollSpeedGain;
+    [SerializeField] private float scrollSpeed;
 
-    private const string IS_EDGE = "Edge";
-    private const string IS_TRIGGER = "Trigger";
+    private Material _material;
+
+    private const string SCROLL_Y = "_ScrollY";
 
     private void Start()
     {
-        spawner = FindObjectOfType<Spawner>();
+        scrollSpeed = 0.5f;
+
+        _material = GetComponent<Renderer>().material;
     }
 
     private void Update()
     {
-        transform.position += Vector3.back * GameManager.Instance.gameSpeed * Time.deltaTime;
+        scrollSpeed += scrollSpeedGain * Time.deltaTime;
+
+        scroll -= scrollSpeed * Time.deltaTime;
+
+        _material.SetFloat(SCROLL_Y, scroll);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag(IS_EDGE))
-            Destroy(gameObject);
-
-        else if (collision.gameObject.CompareTag(IS_TRIGGER))
-            spawner.Spawn();
-    }
+    
 }
