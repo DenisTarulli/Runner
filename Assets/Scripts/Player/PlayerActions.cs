@@ -9,8 +9,6 @@ public class PlayerActions : MonoBehaviour
     private bool canMove = true;
     public bool invulnerable = false;
 
-    [SerializeField] private Image image;
-
     private float movementCooldown = 0.08f;
     private float invulnerabilityTime = 2f;
     private const string MID_TO_LEFT = "MidtoLeft";
@@ -19,6 +17,7 @@ public class PlayerActions : MonoBehaviour
     private const string RIGHT_TO_MID = "RighttoMid";
     private const string IS_OBSTACLE = "Obstacle";
     private const string HIT = "Hit";
+    private const string IS_JUMPING = "isJumping";
 
     private Animator animator;
     private PowerUps powerUps;
