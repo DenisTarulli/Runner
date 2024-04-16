@@ -53,9 +53,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < hearts.Length; i++)
         {
             if (i < hp)
-                hearts[i].color = Color.red;
+                hearts[i].gameObject.SetActive(true);
             else
-                hearts[i].color = Color.grey;
+                hearts[i].gameObject.SetActive(false);
         }
     }
 }

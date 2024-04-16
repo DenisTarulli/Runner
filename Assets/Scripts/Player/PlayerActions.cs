@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
+    [SerializeField] private GameObject invulnerabilityEffect;
+    [SerializeField] private Animator invAnim;
+
     private int positionIndex = 0;
     private bool canMove = true;
     public bool invulnerable = false;
@@ -19,12 +22,12 @@ public class PlayerActions : MonoBehaviour
     private const string HIT = "Hit";
     private const string IS_JUMPING = "isJumping";
 
-    private Animator animator;
+    private Animator playerAnim;
     private PowerUps powerUps;
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        playerAnim = GetComponent<Animator>();
         powerUps = GetComponent<PowerUps>();
         positionIndex = 0;
     }
@@ -41,12 +44,12 @@ public class PlayerActions : MonoBehaviour
         {
             if (positionIndex == 0)
             {
-                animator.SetTrigger(MID_TO_LEFT);
+                playerAnim.SetTrigger(MID_TO_LEFT);
                 positionIndex -= 1;
             }
             else if (positionIndex == 1)
             {
-                animator.SetTrigger(RIGHT_TO_MID);
+                playerAnim.SetTrigger(RIGHT_TO_MID);
                 positionIndex -= 1;
             }
 
@@ -57,12 +60,12 @@ public class PlayerActions : MonoBehaviour
         {
             if (positionIndex == 0)
             {
-                animator.SetTrigger(MID_TO_RIGHT);
+                playerAnim.SetTrigger(MID_TO_RIGHT);
                 positionIndex += 1;
             }
             else if (positionIndex == -1)
             {
-                animator.SetTrigger(LEFT_TO_MID);
+                playerAnim.SetTrigger(LEFT_TO_MID);
                 positionIndex += 1;
             }
 
@@ -109,17 +112,15 @@ public class PlayerActions : MonoBehaviour
     {
         invulnerable = true;
 
-        animator.SetLayerWeight(1, 1);
-        animator.SetBool(HIT, true);
+        invulnerabilityEffect.SetActive(true);
+        invAnim.SetBool(HIT, true);
 
         yield return new WaitForSeconds(invulnerabilityTime);
 
-        if (!powerUps.starActive)
-        {
-            animator.SetLayerWeight(1, 0);
-            invulnerable = false;
-        }
+        if (!powerUps.starActive)    
+            invulnerable = false;        
 
-        animator.SetBool(HIT, false);
+        invulnerabilityEffect.SetActive(false);
+        invAnim.SetBool(HIT, false);
     }
 }
