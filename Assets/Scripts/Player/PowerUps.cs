@@ -55,6 +55,7 @@ public class PowerUps : MonoBehaviour
         playerActions.invulnerable = true;
         starActive = true;
         playerActions.invulnerabilityEffect.SetActive(true);
+        starIconFull.SetActive(false);
 
         animator.SetLayerWeight(1, 1);
         animator.SetBool(STAR, true);
@@ -76,7 +77,6 @@ public class PowerUps : MonoBehaviour
 
         starReady = false;
         starCooldownText.gameObject.SetActive(true);
-        starIconFull.SetActive(false);
 
         starCooldown = starMaxCooldown;
     }

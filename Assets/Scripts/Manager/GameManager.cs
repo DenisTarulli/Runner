@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -17,8 +18,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Image[] hearts;
     [SerializeField] private GameObject tutorial;
+    [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private GameObject newRecordText;
     [SerializeField] private GameObject ui;
     [SerializeField] private float maxGameSpeed;
+    [SerializeField] private TextMeshProUGUI highScoreText;
+    [SerializeField] private TextMeshProUGUI finalScoreText;
 
     private float score;
     [HideInInspector] public int currentHp;
@@ -48,17 +53,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameSpeed < maxGameSpeed)
-        {
-            gameSpeed += gameSpeedIncrease * Time.deltaTime;
-            score += gameSpeed * Time.deltaTime;
-        }
+        if (gameSpeed < maxGameSpeed)        
+            gameSpeed += gameSpeedIncrease * Time.deltaTime;      
         else
-            gameSpeed = maxGameSpeed;        
+            gameSpeed = maxGameSpeed;
 
+        score += gameSpeed * Time.deltaTime;
         scoreText.text = Mathf.FloorToInt(score).ToString("D6");
-
-        Debug.Log(Time.timeScale);
     }
 
     public void StartGame()
@@ -67,6 +68,11 @@ public class GameManager : MonoBehaviour
         gameStarted = true;
         tutorial.SetActive(false);
         ui.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 
     public void HpUpdate(int hp)
@@ -85,7 +91,25 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("Game over");
+        ui.SetActive(false);
+        gameOverScreen.SetActive(true);
+        finalScoreText.text = $"FINAL SCORE: {Mathf.FloorToInt(score).ToString("D6")}";
+
+        UpdateHighScore();
         Time.timeScale = 0f;
+    }
+
+    private void UpdateHighScore()
+    {
+        float highScore = PlayerPrefs.GetFloat("highScore", 0);
+
+        if (score > highScore)
+        {
+            newRecordText.SetActive(true);
+            highScore = score;
+            PlayerPrefs.SetFloat("highScore", highScore);
+        }
+
+        highScoreText.text = $"HIGHEST SCORE: {Mathf.FloorToInt(highScore).ToString("D6")}";
     }
 }
