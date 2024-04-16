@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     public float initialGameSpeed = 1f;
     public float gameSpeedIncrease = 0.1f;
-    public bool gameStarted;
+    [HideInInspector] public bool gameStarted;
     public float gameSpeed { get; private set; }
 
     public TextMeshProUGUI scoreText;
@@ -18,11 +18,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image[] hearts;
     [SerializeField] private GameObject tutorial;
     [SerializeField] private GameObject ui;
+    [SerializeField] private float maxGameSpeed;
 
     private float score;
-    public int currentHp;
-
-    public float cd = 30f;
+    [HideInInspector] public int currentHp;
 
     private void Start()
     {
@@ -49,13 +48,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        gameSpeed += gameSpeedIncrease * Time.deltaTime;
-        score += gameSpeed * Time.deltaTime;
+        if (gameSpeed < maxGameSpeed)
+        {
+            gameSpeed += gameSpeedIncrease * Time.deltaTime;
+            score += gameSpeed * Time.deltaTime;
+        }
+        else
+            gameSpeed = maxGameSpeed;        
 
         scoreText.text = Mathf.FloorToInt(score).ToString("D6");
-        cd -= 1f * Time.deltaTime;
-        
-        Debug.Log(Mathf.CeilToInt(cd));
+
+        Debug.Log(Time.timeScale);
     }
 
     public void StartGame()

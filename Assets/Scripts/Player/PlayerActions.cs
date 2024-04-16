@@ -88,7 +88,8 @@ public class PlayerActions : MonoBehaviour
 
     private void PowerUpInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !pauseMenu.gameIsPaused && !pauseMenu.onCountdown)
+        if (Input.GetKeyDown(KeyCode.Space) && !pauseMenu.gameIsPaused && 
+            !pauseMenu.onCountdown && !powerUps.starActive && powerUps.starReady)
         {
             StartCoroutine(powerUps.Star());
         }
@@ -130,10 +131,12 @@ public class PlayerActions : MonoBehaviour
 
         yield return new WaitForSeconds(invulnerabilityTime);
 
-        if (!powerUps.starActive)    
-            invulnerable = false;        
+        if (!powerUps.starActive)
+        {
+            invulnerable = false;
+            invulnerabilityEffect.SetActive(false);
+        }             
 
-        invulnerabilityEffect.SetActive(false);
         invAnim.SetBool(HIT, false);
     }
 }
