@@ -9,7 +9,7 @@ public class PlayerActions : MonoBehaviour
     private bool canMove = true;
     public bool invulnerable = false;
 
-    private float movementCooldown = 0.08f;
+    private float movementCooldown = 0.12f;
     private float invulnerabilityTime = 2f;
     private const string MID_TO_LEFT = "MidtoLeft";
     private const string MID_TO_RIGHT = "MidtoRight";
