@@ -25,14 +25,22 @@ public class PowerUps : MonoBehaviour
 
         playerActions.invulnerable = true;
         starActive = true;
+        playerActions.invulnerabilityEffect.SetActive(true);
 
         animator.SetLayerWeight(1, 1);
         animator.SetBool(STAR, true);
 
-        yield return new WaitForSeconds(starDuration);
+        yield return new WaitForSeconds(starDuration - 2f);
+
+        playerActions.invAnim.SetBool("Hit", true);
+
+        yield return new WaitForSeconds(2f);
+
+        playerActions.invAnim.SetBool("Hit", false);
 
         playerActions.invulnerable = false;
         starActive = false;
+        playerActions.invulnerabilityEffect.SetActive(false);
 
         animator.SetLayerWeight(1, 0);
         animator.SetBool(STAR, false);

@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void HpUpdate(int hp)
-    {
+    {        
         for (int i = 0; i < hearts.Length; i++)
         {
             if (i < hp)
@@ -57,5 +57,14 @@ public class GameManager : MonoBehaviour
             else
                 hearts[i].gameObject.SetActive(false);
         }
+
+        if (hp == 0)
+            GameOver();
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game over");
+        Time.timeScale = 0f;
     }
 }

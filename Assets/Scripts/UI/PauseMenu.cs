@@ -10,13 +10,17 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenuButtons;
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private AudioSource music;
+    [SerializeField] private GameObject numberThree;
+    [SerializeField] private GameObject numberTwo;
+    [SerializeField] private GameObject numberOne;
 
     // Private references
     private GameObject levelAnim;
     private GameManager gameManager;
 
-    [HideInInspector] public static bool gameIsPaused = false;
+    [HideInInspector] public bool gameIsPaused = false;
     [HideInInspector] public bool inOptions = false;
+    [HideInInspector] public bool onCountdown = false;
 
     private void Start()
     {
@@ -25,7 +29,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) //&& gameManager.gameStarted)
+        if (Input.GetKeyDown(KeyCode.Escape) && !onCountdown) //&& gameManager.gameStarted)
         {
             if (gameIsPaused && !inOptions)
             {
@@ -50,7 +54,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
+        StartCoroutine(nameof(ResumeDelay));        
         //AudioManager.instance.Play("ClickUI");
         gameIsPaused = false;        
     }
@@ -88,5 +92,28 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Quitting game...");
         //AudioManager.instance.Play("ClickUI");
         Application.Quit();
+    }
+
+    public IEnumerator ResumeDelay()
+    {
+        onCountdown = true;
+        numberThree.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        numberThree.SetActive(false);
+        numberTwo.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        numberTwo.SetActive(false);
+        numberOne.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        numberOne.SetActive(false);
+
+        onCountdown = false;
+        Time.timeScale = 1f;
     }
 }

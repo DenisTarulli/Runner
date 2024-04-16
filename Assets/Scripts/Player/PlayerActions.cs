@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
-    [SerializeField] private GameObject invulnerabilityEffect;
-    [SerializeField] private Animator invAnim;
+    [SerializeField] private GameObject body;
+    private float rollSpeed = 1f;
+    private float rollCompensation = 16f;
 
     private int positionIndex = 0;
     private bool canMove = true;
     public bool invulnerable = false;
 
+    public GameObject invulnerabilityEffect;
     private float movementCooldown = 0.12f;
     private float invulnerabilityTime = 2f;
     private const string MID_TO_LEFT = "MidtoLeft";
@@ -22,11 +24,15 @@ public class PlayerActions : MonoBehaviour
     private const string HIT = "Hit";
     private const string IS_JUMPING = "isJumping";
 
+    private PauseMenu pauseMenu;
     private Animator playerAnim;
     private PowerUps powerUps;
+    public Animator invAnim;
 
     private void Start()
     {
+        pauseMenu = FindObjectOfType<PauseMenu>();
+
         playerAnim = GetComponent<Animator>();
         powerUps = GetComponent<PowerUps>();
         positionIndex = 0;
@@ -36,46 +42,53 @@ public class PlayerActions : MonoBehaviour
     {
         Movement();
         PowerUpInputs();
+
+        rollSpeed = GameManager.Instance.gameSpeed * rollCompensation * Time.deltaTime;
+        body.transform.Rotate(rollSpeed, 0, 0);
     }
 
     private void Movement()
     {
-        if (Input.GetKeyDown(KeyCode.A) && positionIndex != -1 && canMove)
+        if (!pauseMenu.onCountdown)
         {
-            if (positionIndex == 0)
+            if (Input.GetKeyDown(KeyCode.A) && positionIndex != -1 && canMove)
             {
-                playerAnim.SetTrigger(MID_TO_LEFT);
-                positionIndex -= 1;
-            }
-            else if (positionIndex == 1)
-            {
-                playerAnim.SetTrigger(RIGHT_TO_MID);
-                positionIndex -= 1;
+                if (positionIndex == 0)
+                {
+                    playerAnim.SetTrigger(MID_TO_LEFT);
+                    positionIndex -= 1;
+                }
+                else if (positionIndex == 1)
+                {
+                    playerAnim.SetTrigger(RIGHT_TO_MID);
+                    positionIndex -= 1;
+                }
+
+                StartCoroutine(nameof(MovementCooldown));
             }
 
-            StartCoroutine(nameof(MovementCooldown));
+            if (Input.GetKeyDown(KeyCode.D) && positionIndex != 1 && canMove)
+            {
+                if (positionIndex == 0)
+                {
+                    playerAnim.SetTrigger(MID_TO_RIGHT);
+                    positionIndex += 1;
+                }
+                else if (positionIndex == -1)
+                {
+                    playerAnim.SetTrigger(LEFT_TO_MID);
+                    positionIndex += 1;
+                }
+
+                StartCoroutine(nameof(MovementCooldown));
+            }
         }
-
-        if (Input.GetKeyDown(KeyCode.D) && positionIndex != 1 && canMove)
-        {
-            if (positionIndex == 0)
-            {
-                playerAnim.SetTrigger(MID_TO_RIGHT);
-                positionIndex += 1;
-            }
-            else if (positionIndex == -1)
-            {
-                playerAnim.SetTrigger(LEFT_TO_MID);
-                positionIndex += 1;
-            }
-
-            StartCoroutine(nameof(MovementCooldown));
-        }
+        
     }
 
     private void PowerUpInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !pauseMenu.gameIsPaused && !pauseMenu.onCountdown)
         {
             StartCoroutine(powerUps.Star());
         }
