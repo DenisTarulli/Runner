@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
         score += gameSpeed * Time.deltaTime;
 
-        scoreText.text = Mathf.FloorToInt(score).ToString("D5");
+        scoreText.text = Mathf.FloorToInt(score).ToString("D6");
     }
 
     public void HpUpdate(int hp)
