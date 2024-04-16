@@ -16,20 +16,14 @@ public class PauseMenu : MonoBehaviour
 
     // Private references
     private GameObject levelAnim;
-    private GameManager gameManager;
 
     [HideInInspector] public bool gameIsPaused = false;
     [HideInInspector] public bool inOptions = false;
     [HideInInspector] public bool onCountdown = false;
 
-    private void Start()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-    }
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !onCountdown) //&& gameManager.gameStarted)
+        if (Input.GetKeyDown(KeyCode.Escape) && !onCountdown && GameManager.Instance.gameStarted)
         {
             if (gameIsPaused && !inOptions)
             {
