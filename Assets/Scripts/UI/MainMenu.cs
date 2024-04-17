@@ -5,17 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    //[SerializeField] private Texture2D defaultCursor;
-    //private Vector2 defaultHotspot = Vector2.zero;
+    [SerializeField] private Animator transition;
 
-    private void Start()
-    {
-        //Cursor.SetCursor(defaultCursor, defaultHotspot, CursorMode.Auto);
-    }
+    private float transitionDuration = 1f;
 
     public void PlayGame()
     {
-        SceneManager.LoadScene("GameScene");
+        StartCoroutine(nameof(LoadLevel));
+
         //ClickSound();
     }
     /*
@@ -33,5 +30,14 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quitting...");
         Application.Quit();
+    }
+
+    private IEnumerator LoadLevel()
+    {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(transitionDuration);
+
+        SceneManager.LoadScene("GameScene");
     }
 }

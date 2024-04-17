@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxGameSpeed;
     [SerializeField] private TextMeshProUGUI highScoreText;
     [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private Animator transition;
 
+    private float transitionDuration = 1f;
     private float score;
     [HideInInspector] public int currentHp;
 
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("GameScene");
+        StartCoroutine(nameof(RestartGame));
     }
 
     public void HpUpdate(int hp)
@@ -111,5 +113,14 @@ public class GameManager : MonoBehaviour
         }
 
         highScoreText.text = $"HIGHEST SCORE: {Mathf.FloorToInt(highScore).ToString("D6")}";
+    }
+
+    private IEnumerator RestartGame()
+    {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSecondsRealtime(transitionDuration);
+        
+        SceneManager.LoadScene("GameScene");
     }
 }
