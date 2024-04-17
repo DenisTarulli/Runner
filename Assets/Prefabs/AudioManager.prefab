@@ -333,7 +333,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Jump
     clip: {fileID: 8300000, guid: 33d29c5d0c1f0ce40bb42ef86d0a8574, type: 3}
-    volume: 0.5
+    volume: 0.65
     pitch: 1.5
     loop: 0
     playOnAwake: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Boop
     clip: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
-    volume: 0.3
+    volume: 0.25
     pitch: 1
     loop: 0
     playOnAwake: 0

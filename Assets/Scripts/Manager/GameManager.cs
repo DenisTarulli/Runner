@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public float gameSpeed { get; private set; }
 
     public TextMeshProUGUI scoreText;
+    public bool gameOver;
 
     [SerializeField] private Image[] hearts;
     [SerializeField] private GameObject tutorial;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        gameOver = false;
         music = GameObject.FindWithTag("Music").GetComponent<AudioSource>();
         gameStarted = false;
         Time.timeScale = 0f;
@@ -111,6 +113,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        Cursor.lockState = CursorLockMode.None;
+
+        gameOver = true;
         music.volume = 0.02f;
         ui.SetActive(false);
         gameOverScreen.SetActive(true);

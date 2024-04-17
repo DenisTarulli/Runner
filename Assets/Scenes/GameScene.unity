@@ -272,6 +272,7 @@ MonoBehaviour:
   gameSpeedIncrease: 0.1
   gameStarted: 0
   scoreText: {fileID: 581517348}
+  gameOver: 0
   hearts:
   - {fileID: 1043915000}
   - {fileID: 938564689}

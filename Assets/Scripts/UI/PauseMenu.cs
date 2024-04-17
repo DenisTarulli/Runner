@@ -33,7 +33,8 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !onCountdown && GameManager.Instance.gameStarted)
+        if (Input.GetKeyDown(KeyCode.Escape) && !onCountdown && GameManager.Instance.gameStarted
+            && !GameManager.Instance.gameOver)
         {
             if (gameIsPaused && !inOptions)
             {
