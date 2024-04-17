@@ -8,11 +8,15 @@ public class PowerUps : MonoBehaviour
 {
     [SerializeField] private float starDuration = 7f;
     [SerializeField] private GameObject starIconFull;
+    
     [SerializeField] private TextMeshProUGUI starCooldownText;
     [SerializeField] private float starMaxCooldown = 30f;
 
     private PlayerActions playerActions;
     private Animator animator;
+
+    private AudioSource starAudio;
+    private AudioSource music;
 
     private float starCooldown;
     public bool starActive = false;
@@ -22,6 +26,9 @@ public class PowerUps : MonoBehaviour
 
     private void Start()
     {
+        music = GameObject.FindWithTag("Music").GetComponent<AudioSource>();
+        starAudio = GameObject.FindWithTag("StarMusic").GetComponent<AudioSource>();
+
         playerActions = GetComponent<PlayerActions>();
         animator = GetComponent<Animator>();
         starCooldown = starMaxCooldown;
@@ -52,6 +59,9 @@ public class PowerUps : MonoBehaviour
     {
         if (starActive) yield break;
 
+        music.volume = 0f;
+        starAudio.volume = 0.8f;
+
         playerActions.invulnerable = true;
         starActive = true;
         playerActions.invulnerabilityEffect.SetActive(true);
@@ -67,6 +77,9 @@ public class PowerUps : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         playerActions.invAnim.SetBool("Hit", false);
+
+        music.volume = 0.045f;
+        starAudio.volume = 0f;
 
         playerActions.invulnerable = false;
         starActive = false;

@@ -10,6 +10,9 @@ TagManager:
   - Trigger
   - Spawner
   - Obstacle
+  - AudioManager
+  - Music
+  - StarMusic
   layers:
   - Default
   - TransparentFX

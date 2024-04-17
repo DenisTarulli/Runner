@@ -55,11 +55,13 @@ public class PlayerActions : MonoBehaviour
             {
                 if (positionIndex == 0)
                 {
+                    AudioManager.instance.Play("Jump");
                     playerAnim.SetTrigger(MID_TO_LEFT);
                     positionIndex -= 1;
                 }
                 else if (positionIndex == 1)
                 {
+                    AudioManager.instance.Play("Jump");
                     playerAnim.SetTrigger(RIGHT_TO_MID);
                     positionIndex -= 1;
                 }
@@ -71,11 +73,13 @@ public class PlayerActions : MonoBehaviour
             {
                 if (positionIndex == 0)
                 {
+                    AudioManager.instance.Play("Jump");
                     playerAnim.SetTrigger(MID_TO_RIGHT);
                     positionIndex += 1;
                 }
                 else if (positionIndex == -1)
                 {
+                    AudioManager.instance.Play("Jump");
                     playerAnim.SetTrigger(LEFT_TO_MID);
                     positionIndex += 1;
                 }

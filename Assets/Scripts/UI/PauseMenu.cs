@@ -9,17 +9,23 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject pauseMenuButtons;
     [SerializeField] private GameObject optionsMenu;
-    [SerializeField] private AudioSource music;
     [SerializeField] private GameObject numberThree;
     [SerializeField] private GameObject numberTwo;
     [SerializeField] private GameObject numberOne;
 
     // Private references
     private GameObject levelAnim;
+    private AudioSource music;
 
     [HideInInspector] public bool gameIsPaused = false;
     [HideInInspector] public bool inOptions = false;
     [HideInInspector] public bool onCountdown = false;
+
+    private void Start()
+    {
+        music = GameObject.FindWithTag("Music").GetComponent<AudioSource>();
+        music.volume = 0.02f;
+    }
 
     private void Update()
     {
@@ -27,43 +33,40 @@ public class PauseMenu : MonoBehaviour
         {
             if (gameIsPaused && !inOptions)
             {
+                BackSound();
                 Resume();
             }
             else if (!gameIsPaused && !inOptions)
                 Pause();
             else if (gameIsPaused && inOptions)
             {
+                BackSound();
                 pauseMenuButtons.SetActive(true);
                 optionsMenu.SetActive(false);
                 Options();
             }
-        }
-        /*
-        if (gameIsPaused) //|| !gameManager.gameStarted)
-            music.volume = 0.02f;
-        else
-            music.volume = 0.06f;*/
+        }  
     }
 
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
         StartCoroutine(nameof(ResumeDelay));        
-        //AudioManager.instance.Play("ClickUI");
-        gameIsPaused = false;        
+        gameIsPaused = false;
+        music.volume = 0.045f;
     }
 
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
-        //AudioManager.instance.Play("Pause");
+        AudioManager.instance.Play("Pause");
         Time.timeScale = 0f;
         gameIsPaused = true;
     }
 
     public void MainMenu()
     {
-        //AudioManager.instance.Play("ClickUI");
+        AudioManager.instance.Play("ClickUI");
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -72,19 +75,17 @@ public class PauseMenu : MonoBehaviour
         if (!inOptions)
         {
             inOptions = true;
-            //AudioManager.instance.Play("ClickUI");
         }
         else
         {
             inOptions = false;
-            //AudioManager.instance.Play("BackUI");
         }
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting game...");
-        //AudioManager.instance.Play("ClickUI");
+        AudioManager.instance.Play("BackUI");
         Application.Quit();
     }
 
@@ -92,16 +93,19 @@ public class PauseMenu : MonoBehaviour
     {
         onCountdown = true;
         numberThree.SetActive(true);
+        AudioManager.instance.Play("Tick");
 
         yield return new WaitForSecondsRealtime(0.5f);
 
         numberThree.SetActive(false);
         numberTwo.SetActive(true);
+        AudioManager.instance.Play("Tick");
 
         yield return new WaitForSecondsRealtime(0.5f);
 
         numberTwo.SetActive(false);
         numberOne.SetActive(true);
+        AudioManager.instance.Play("Tick");
 
         yield return new WaitForSecondsRealtime(0.5f);
 
@@ -109,5 +113,15 @@ public class PauseMenu : MonoBehaviour
 
         onCountdown = false;
         Time.timeScale = 1f;
+    }
+
+    public void ConfirmSound()
+    {
+        AudioManager.instance.Play("ClickUI");
+    }
+
+    public void BackSound()
+    {
+        AudioManager.instance.Play("BackUI");
     }
 }

@@ -6,16 +6,21 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Animator transition;
+    [SerializeField] private GameObject levelLoader;
 
     private float transitionDuration = 1f;
 
+    private void Awake()
+    {
+        levelLoader.SetActive(true);
+    }
     public void PlayGame()
     {
         StartCoroutine(nameof(LoadLevel));
 
-        //ClickSound();
+        ClickSound();
     }
-    /*
+    
     public void ClickSound()
     {
         AudioManager.instance.Play("ClickUI");
@@ -25,9 +30,10 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.instance.Play("BackUI");
     }
-    */
+    
     public void QuitGame()
     {
+        BackSound();
         Debug.Log("Quitting...");
         Application.Quit();
     }
@@ -36,7 +42,7 @@ public class MainMenu : MonoBehaviour
     {
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionDuration);
+        yield return new WaitForSecondsRealtime(transitionDuration);
 
         SceneManager.LoadScene("GameScene");
     }

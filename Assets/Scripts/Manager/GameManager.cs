@@ -25,13 +25,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI highScoreText;
     [SerializeField] private TextMeshProUGUI finalScoreText;
     [SerializeField] private Animator transition;
+    [SerializeField] private GameObject levelLoader;
 
+    private AudioSource music;
     private float transitionDuration = 1f;
     private float score;
-    [HideInInspector] public int currentHp;
+    [HideInInspector] public int currentHp;    
 
     private void Start()
     {
+        music = GameObject.FindWithTag("Music").GetComponent<AudioSource>();
         gameStarted = false;
         Time.timeScale = 0f;
         gameSpeed = initialGameSpeed;
@@ -45,6 +48,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         else
             DestroyImmediate(gameObject);
+
+        levelLoader.SetActive(true);
     }
 
     private void OnDestroy()
@@ -70,10 +75,12 @@ public class GameManager : MonoBehaviour
         gameStarted = true;
         tutorial.SetActive(false);
         ui.SetActive(true);
+        music.volume = 0.045f;
     }
 
     public void Restart()
     {
+        AudioManager.instance.Play("ClickUI");
         StartCoroutine(nameof(RestartGame));
     }
 
@@ -93,6 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        music.volume = 0.02f;
         ui.SetActive(false);
         gameOverScreen.SetActive(true);
         finalScoreText.text = $"FINAL SCORE: {Mathf.FloorToInt(score).ToString("D6")}";
