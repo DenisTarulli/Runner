@@ -60,7 +60,7 @@ public class PowerUps : MonoBehaviour
         if (starActive) yield break;
 
         music.volume = 0f;
-        starAudio.volume = 0.8f;
+        starAudio.volume = 1f;
 
         playerActions.invulnerable = true;
         starActive = true;

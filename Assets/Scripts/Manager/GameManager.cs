@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalScoreText;
     [SerializeField] private Animator transition;
     [SerializeField] private GameObject levelLoader;
+    [SerializeField] private Slider volumeSlider;
 
     private AudioSource music;
     private float transitionDuration = 1f;
@@ -40,6 +41,14 @@ public class GameManager : MonoBehaviour
         gameSpeed = initialGameSpeed;
         currentHp = 3;
         HpUpdate(currentHp);
+
+        if (!PlayerPrefs.HasKey("musicVolume"))
+        {
+            PlayerPrefs.SetFloat("musicVolume", 1);
+            Load();
+        }
+        else
+            Load();
     }
 
     private void Awake()
@@ -56,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == this)
             Instance = null;
-    }    
+    } 
 
     private void Update()
     {
@@ -76,6 +85,8 @@ public class GameManager : MonoBehaviour
         tutorial.SetActive(false);
         ui.SetActive(true);
         music.volume = 0.045f;
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void Restart()
@@ -95,7 +106,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (hp == 0)
-            GameOver();
+            GameOver();            
     }
 
     public void GameOver()
@@ -115,10 +126,13 @@ public class GameManager : MonoBehaviour
 
         if (score > highScore)
         {
+            AudioManager.instance.Play("NewRecord");
             newRecordText.SetActive(true);
             highScore = score;
             PlayerPrefs.SetFloat("highScore", highScore);
         }
+        else
+            AudioManager.instance.Play("GameOver");
 
         highScoreText.text = $"HIGHEST SCORE: {Mathf.FloorToInt(highScore).ToString("D6")}";
     }
@@ -130,5 +144,21 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(transitionDuration);
         
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void ChangeVolume()
+    {
+        AudioListener.volume = volumeSlider.value;
+        Save();
+    }
+
+    private void Load()
+    {
+        volumeSlider.value = PlayerPrefs.GetFloat("musicVolume");
+    }
+
+    private void Save()
+    {
+        PlayerPrefs.SetFloat("musicVolume", volumeSlider.value);
     }
 }

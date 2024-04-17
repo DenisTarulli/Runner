@@ -174,7 +174,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.045
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -305,14 +305,14 @@ MonoBehaviour:
   sounds:
   - name: ClickUI
     clip: {fileID: 8300000, guid: 6c65d4b5a90ee2748a8f7c8c0c39b0b1, type: 3}
-    volume: 0.55
+    volume: 0.5
     pitch: 1
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
   - name: BackUI
     clip: {fileID: 8300000, guid: c7e6da9f6239f3546a7a8bf8c45e909c, type: 3}
-    volume: 0.55
+    volume: 0.5
     pitch: 1
     loop: 0
     playOnAwake: 0
@@ -326,15 +326,50 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Tick
     clip: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
-    volume: 1
-    pitch: 1
+    volume: 0.9
+    pitch: 0.8
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
   - name: Jump
     clip: {fileID: 8300000, guid: 33d29c5d0c1f0ce40bb42ef86d0a8574, type: 3}
-    volume: 0.7
+    volume: 0.5
     pitch: 1.5
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Hit
+    clip: {fileID: 8300000, guid: 881e3f52c86c94f26a60718d35627cd8, type: 3}
+    volume: 0.7
+    pitch: 0.8
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Boop
+    clip: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: NewRecord
+    clip: {fileID: 8300000, guid: 7478151cf36724a7dada558f746c3633, type: 3}
+    volume: 0.6
+    pitch: 1.2
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: GameOver
+    clip: {fileID: 8300000, guid: 89e6bc608da7b47d4914f3d9c2484e48, type: 3}
+    volume: 0.6
+    pitch: 0.7
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: HpUp
+    clip: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+    volume: 0.4
+    pitch: 1
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}

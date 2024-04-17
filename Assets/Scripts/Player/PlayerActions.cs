@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
     [SerializeField] private GameObject body;
+    [SerializeField] private GameObject hpUpAnim;
+    [SerializeField] private TextMeshProUGUI pinsText;
+    [SerializeField] private int pinsForHP;
     private float rollSpeed = 1f;
     private float rollCompensation = 16f;
 
+    private int pins;
     private int positionIndex = 0;
     private bool canMove = true;
     public bool invulnerable = false;
@@ -31,7 +36,9 @@ public class PlayerActions : MonoBehaviour
 
     private void Start()
     {
+        pinsText.text = $"{pins.ToString("D2")}/{pinsForHP}";
         pauseMenu = FindObjectOfType<PauseMenu>();
+        pins = 0;
 
         playerAnim = GetComponent<Animator>();
         powerUps = GetComponent<PowerUps>();
@@ -116,12 +123,31 @@ public class PlayerActions : MonoBehaviour
             {
                 StartCoroutine(nameof(Invulnerability));
                 GameManager.Instance.currentHp--;
+
+                if (GameManager.Instance.currentHp != 0)
+                    AudioManager.instance.Play("Hit");
+
                 GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
             }
             
             if (powerUps.starActive)
             {
+                pins++;
+                pinsText.text = $"{pins.ToString("D2")}/{pinsForHP}";
+
+                if (pins == pinsForHP)
+                {
+                    AudioManager.instance.Play("HpUp");
+                    StartCoroutine(nameof(HpUpAnimation));
+
+                    pins = 0;
+                    pinsText.text = $"{pins.ToString("D2")}/{pinsForHP}";
+                    GameManager.Instance.currentHp++;
+                    GameManager.Instance.HpUpdate(GameManager.Instance.currentHp);
+                }
+
                 Destroy(collision.collider.gameObject);
+                AudioManager.instance.Play("Boop");
             }
         }
     }
@@ -142,5 +168,16 @@ public class PlayerActions : MonoBehaviour
         }             
 
         invAnim.SetBool(HIT, false);
+    }
+
+    private IEnumerator HpUpAnimation()
+    {
+        hpUpAnim.SetActive(true);
+        hpUpAnim.GetComponent<Animator>().SetBool("HpUp", true);
+
+        yield return new WaitForSeconds(1f);
+
+        hpUpAnim.GetComponent<Animator>().SetBool("HpUp", false);
+        hpUpAnim.SetActive(false);
     }
 }

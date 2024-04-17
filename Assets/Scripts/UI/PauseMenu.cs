@@ -14,8 +14,10 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject numberOne;
 
     // Private references
+    private PowerUps powersUp;
     private GameObject levelAnim;
     private AudioSource music;
+    private AudioSource starAudio;
 
     [HideInInspector] public bool gameIsPaused = false;
     [HideInInspector] public bool inOptions = false;
@@ -24,6 +26,8 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         music = GameObject.FindWithTag("Music").GetComponent<AudioSource>();
+        starAudio = GameObject.FindWithTag("StarMusic").GetComponent<AudioSource>();
+        powersUp = FindObjectOfType<PowerUps>();
         music.volume = 0.02f;
     }
 
@@ -50,14 +54,26 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        if (powersUp.starActive)
+            starAudio.volume = 1f;
+        else
+            music.volume = 0.045f;
+
+        Cursor.lockState = CursorLockMode.Locked;
         pauseMenuUI.SetActive(false);
         StartCoroutine(nameof(ResumeDelay));        
         gameIsPaused = false;
-        music.volume = 0.045f;
     }
 
     public void Pause()
     {
+        if (powersUp.starActive)
+            starAudio.volume = 0.55f;
+        else
+            music.volume = 0.02f;
+
+        Cursor.lockState = CursorLockMode.None;
+
         pauseMenuUI.SetActive(true);
         AudioManager.instance.Play("Pause");
         Time.timeScale = 0f;
